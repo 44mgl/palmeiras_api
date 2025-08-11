@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Próximo Jogo do Palmeiras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #006437;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .card {
+            background: #004d2c;
+            border-radius: 15px;
+            padding: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        .time {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Próximo Jogo do Palmeiras</h1>
+    <div class="card">
+        <p class="time" id="times"></p>
+        <p id="data"></p>
+        <p id="local"></p>
+    </div>
+
+    <script>
+        const apiKey = "59c18f90196bcf3950d1d680442f86df"; // Cadastre-se na API-Football
+        const url = `https://v3.football.api-sports.io/fixtures?team=176&next=1`;
+
+        fetch(url, {
+            headers: {
+                "x-apisports-key": apiKey
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            const jogo = data.response[0];
+            document.getElementById("times").textContent = `${jogo.teams.home.name} vs ${jogo.teams.away.name}`;
+            document.getElementById("data").textContent = new Date(jogo.fixture.date).toLocaleString("pt-BR");
+            document.getElementById("local").textContent = jogo.fixture.venue.name;
+        })
+        .catch(err => {
+            console.error("Erro ao buscar dados:", err);
+            document.getElementById("times").textContent = "Não foi possível carregar os dados.";
+        });
+    </script>
+</body>
+</html>
